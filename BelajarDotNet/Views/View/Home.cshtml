@@ -1,0 +1,132 @@
+﻿@model List<StudentView> //dengan viewimport tidak perlu BelajarView.Models
+
+@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_LayoutView.cshtml";
+
+}
+
+<h3>Code Block</h3>
+
+@{
+    var greeting = "Welcome to ASP.NET Core MVC!";
+    var weekDay = DateTime.Now.DayOfWeek;
+    ViewData["Title"] = "Home Page";
+}
+
+@{
+    var product = new BelajarDotNet.Models.ProductView()
+    {
+        Id = 1000,
+        Name = "Laptop",
+        Description = "Its a Gaming Laptop",
+        Category = "Electronics",
+        Price = 10000
+    };
+}
+@* Implicit Razor syntax *@
+<p>@greeting Implicit Razor syntax</p>
+<p>@DateTime.Now</p>
+<p>Hari ini hari @weekDay</p>
+<p>Nama : @product.Name</p>
+<p>Desc : @product.Description</p>
+<p>Harga : @product.Price</p>
+
+@* explicit razor syntax  *@
+<p>@(greeting) explicit razor syntax</p>
+<p>@(DateTime.Now)</p>
+<p>Today is : @(weekDay) thank you </p>
+<p>Name : @(product.Name)</p>
+<p>Description : @(product.Description)</p>
+<p>Price : @(product.Price)</p>
+
+@{
+    var value = 200;
+}
+<h3>Switch</h3>
+@switch (value)
+{
+    case 0:
+        @: value is Zero
+        break;
+    case 100:
+        <p>Value is 100 </p>
+        break;
+    case 200:
+        <p>Value is @value </p>
+        break;
+    case 300:
+        <text>Value is 300</text>
+        break;
+    default:
+        <p>Invalid Value </p>
+        break;
+}
+
+<h3>For loop</h3>
+@for (int i = 0; i < 5; i++)
+{
+    <span> @i </span>
+}
+
+<h3>While loop</h3>
+@{
+    var r = 0;
+    while (r < 5)
+    {
+        r += 1;
+        <span> @r</span>
+    }
+}
+
+@* View Component *@
+<div class="text-center">
+    @await Component.InvokeAsync("TopProducts", new { count = 3 })
+</div>
+
+
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>View</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var student in Model)
+            {
+                <tr>
+                    <td>@student.Id</td>
+                    <td>@student.Name</td>
+                    <td class="text-center"><a href="#" class="btn btn-primary">View</a></td>
+                    <td class="text-center"><a href="#" class="btn btn-primary">Edit</a></td>
+                    <td class="text-center"><a href="#" class="btn btn-danger">Delete</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section RecentComments {
+    <h3>Recent Comments</h3>
+    @{
+        var comments = await CommentService.GetRecentCommentsAsync();
+        if (comments.Any())
+        {
+            <ul>
+                @foreach (var comment in comments)
+                {
+                    <li>@comment.Text - <strong>@comment.User</strong></li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>No recent comments.</p>
+        }
+    }
+}

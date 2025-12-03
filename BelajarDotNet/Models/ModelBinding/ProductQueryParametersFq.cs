@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Diagnostics;
 
-namespace BelajarDotNet.Models.Model_Binding
+namespace BelajarDotNet.Models.ModelBinding
 {
     public class ProductQueryParametersFq
     {

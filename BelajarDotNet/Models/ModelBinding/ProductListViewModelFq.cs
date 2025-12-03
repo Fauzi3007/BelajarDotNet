@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace BelajarDotNet.Models.Model_Binding
+namespace BelajarDotNet.Models.ModelBinding
 {
     public class ProductListViewModelFq
     {

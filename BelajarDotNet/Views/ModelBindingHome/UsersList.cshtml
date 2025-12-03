@@ -1,0 +1,29 @@
+﻿@model List<UserFromRoute>
+@{
+    ViewBag.Title = "User FromRoute Details";
+    Layout = "_LayoutModelBinding";
+
+}
+
+<h2>Users FromRoute Details</h2>
+<p>Click the name to see details</p>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-info">No users available.</div>
+}
+else
+{
+    <div class="list-group">
+        @foreach (var user in Model)
+        {
+            <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+               asp-controller="ModelBindingHome"
+               asp-action="GetUserById"
+               asp-route-id="@user.Id">
+                <span>@user.Name</span>
+                <small class="text-muted">Age: @user.Age</small>
+            </a>
+        }
+    </div>
+}

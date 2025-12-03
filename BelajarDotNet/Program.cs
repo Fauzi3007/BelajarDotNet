@@ -1,4 +1,6 @@
-namespace BelajarDotNet
+using BelajarDotNet.Models;
+
+namespace BelajarDotNet.Models.ModelBinding
 {
     public class Program
     {
@@ -7,7 +9,10 @@ namespace BelajarDotNet
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews(options =>
+            {
+                options.ModelBinderProviders.Insert(1, new DateRangeModelBinderProvider());
+            });
 
             var app = builder.Build();
 

@@ -1,5 +1,5 @@
 ﻿using BelajarDotNet.Models;
-using BelajarDotNet.Models.Model_Binding;
+using BelajarDotNet.Models.ModelBinding;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -85,10 +85,10 @@ namespace BelajarDotNet.Controllers
                 DateOfBirth = DateOfBirth,
                 TermsAccepted = TermsAccepted
             };
+            ViewBag.Countries = new List<string> { "United States", "Canada", "United Kingdom", "Australia", "India" };
+            ViewBag.Hobbies = new List<string> { "Reading", "Traveling", "Gaming", "Cooking" };
             if (!ModelState.IsValid)
             {
-                ViewBag.Countries = new List<string> { "United States", "Canada", "United Kingdom", "Australia", "India" };
-                ViewBag.Hobbies = new List<string> { "Reading", "Traveling", "Gaming", "Cooking" };
                 return View(user);
             }
             return RedirectToAction("SuccessFromForm", user);
@@ -140,6 +140,92 @@ namespace BelajarDotNet.Controllers
                 PageSizeOptions = pageSizeOptions 
             };
             return View(viewModel);
+        }
+
+        // FromRoute Attribute Example
+
+        private List<UserFromRoute> _users = new List<UserFromRoute>() {
+
+                new UserFromRoute(){Id =1, Name ="Fauzi", Age = 22,Mobile="082313131331"},
+                new UserFromRoute(){Id =2, Name ="Sigit", Age = 23,Mobile="082313131331"},
+                new UserFromRoute(){Id =3, Name ="Berka", Age = 22, Mobile = "082313131331"},
+                new UserFromRoute(){Id =4, Name ="Egy", Age=21, Mobile = "082313131331"},
+                new UserFromRoute(){Id =5, Name ="Evan", Age=22, Mobile = "082313131331"},
+                new UserFromRoute(){Id =5, Name ="Regi", Age=22, Mobile = "082313131331"}
+            };
+        [HttpGet]
+        public IActionResult UsersList()
+        {
+            return View(_users);
+        }
+
+
+        [HttpGet]
+        [Route("users/{Id}/getdetails")]
+        public IActionResult GetUserById([FromRoute(Name = "Id")] int Id)
+        {
+            var user = _users.FirstOrDefault(x => x.Id == Id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return Ok(user);
+        }
+
+        // Model Binding Complex Types Example
+
+        [HttpGet("Student/Create")]
+        public ViewResult CreateComplex()
+        {
+            ViewBag.AllGenders = Enum.GetValues(typeof(GenderMb)).Cast<GenderMb>().ToList();
+            ViewBag.AllBranches = new List<SelectListItem>()
+            {
+                new SelectListItem { Text = "None", Value = "1" },
+                new SelectListItem { Text = "CSE", Value = "2" },
+                new SelectListItem { Text = "ETC", Value = "3" },
+                new SelectListItem { Text = "Mech", Value = "4" }
+            };
+            ViewBag.Hobbies = new List<string> { "Reading", "Swimming", "Painting", "Cycling", "Hiking" };
+            return View();
+        }
+        [HttpPost("Student/Create")]
+        public IActionResult CreateComplex(StudentMb student)
+        {
+            if (ModelState.IsValid)
+            {
+                return RedirectToAction("Successful");
+            }
+            else
+            {
+                ViewBag.AllGenders = Enum.GetValues(typeof(GenderMb)).Cast<GenderMb>().ToList();
+                ViewBag.AllBranches = new List<SelectListItem>()
+                {
+                    new SelectListItem { Text = "None", Value = "1" },
+                    new SelectListItem { Text = "CSE", Value = "2" },
+                    new SelectListItem { Text = "ETC", Value = "3" },
+                    new SelectListItem { Text = "Mech", Value = "4" }
+                };
+                ViewBag.Hobbies = new List<string> { "Reading", "Swimming", "Painting", "Cycling", "Hiking" };
+                return View(student);
+            }
+        }
+        public string Successful()
+        {
+            return "Student Created Successfully";
+        }
+
+        // Custom Model Binder Example
+
+        public IActionResult CustomDateBinder()
+        {
+            return View();
+        }
+
+        [HttpGet("home/getdata")]
+        public IActionResult GetData([ModelBinder(typeof(DateRangeModelBinder))] DateRange range)
+        {
+            // Do something with range.StartDate and range.EndDate
+            return Ok($"The range parameters are From {range.StartDate} to {range.EndDate}");
         }
     }
 }

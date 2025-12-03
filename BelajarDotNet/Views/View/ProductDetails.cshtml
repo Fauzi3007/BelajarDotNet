@@ -1,0 +1,17 @@
+﻿@model ProductView
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_LayoutView.cshtml";
+}
+<div>
+    <h4>Product Details</h4>
+    <p>Rendering the Result of Partial View</p>
+    @Html.Partial("_ProductDetails", Model)
+    <br />
+    <p>Storing the Result of Partial View into a variable</p>
+    @{
+        var result = Html.Partial("_ProductDetails", Model);
+    }
+    <span>@result</span>
+</div>
