@@ -1,0 +1,41 @@
+﻿@model User
+
+@{
+    ViewData["Title"] = "Home Page";
+    Layout = "_LayoutModelBinding";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Submit Your Details</h4>
+                </div>
+                <div class="card-body">
+                    @if (!string.IsNullOrEmpty(ViewBag.Message))
+                    {
+                        <div class="alert alert-success">
+                            @ViewBag.Message
+                        </div>
+                    }
+                    <form method="post" asp-controller="ModelBindingHome" asp-action="SubmitForm">
+                        <div class="form-group mt-2">
+                            <label asp-for="UserName"></label>
+                            <input asp-for="UserName" class="form-control" placeholder="Enter your name" />
+                            <span asp-validation-for="UserName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label asp-for="UserEmail"></label>
+                            <input asp-for="UserEmail" class="form-control" placeholder="Enter your email" />
+                            <span asp-validation-for="UserEmail" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mt-2">
+                            <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
